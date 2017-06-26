@@ -48,6 +48,10 @@ public class Store_OrderServlet extends HttpServlet{
 			List<Store_OrderVO> orderList = orderDao.getAll();
 			writeText(response, gson.toJson(orderList));
 		}
+		if (action.equals("getByState")) {
+			List<Store_OrderVO> orderList = orderDao.getAll();
+			writeText(response, gson.toJson(orderList));
+		}
 	}
 
 	private void writeText(HttpServletResponse response, String outText)
