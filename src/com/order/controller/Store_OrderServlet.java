@@ -49,7 +49,11 @@ public class Store_OrderServlet extends HttpServlet{
 			writeText(response, gson.toJson(orderList));
 		}
 		if (action.equals("getByState")) {
-			List<Store_OrderVO> orderList = orderDao.getAll();
+			List<Store_OrderVO> orderList = orderDao.getByState();
+			writeText(response, gson.toJson(orderList));
+		}
+		if (action.equals("getBycomState")) {
+			List<Store_OrderVO> orderList = orderDao.getBycomState();
 			writeText(response, gson.toJson(orderList));
 		}
 	}
