@@ -40,7 +40,8 @@ public class MemberServlet extends HttpServlet {
 		MemberDAO memberDao = new MemberDAO();
 		String action = jsonObject.get("action").getAsString();
 		String account = jsonObject.get("account").getAsString();
-		System.out.println("action: " + action);
+		System.out.println(account);
+//		System.out.println("action: " + action);
 
 		if (action.equals("getMember")) {
 			MemberVO memberVO = memberDao.findByPrimaryKey(account);

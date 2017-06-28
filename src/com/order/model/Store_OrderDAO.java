@@ -54,9 +54,9 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 			pstmt.setTimestamp(1, orderVO.getOrder_time());
 			pstmt.setString(2, orderVO.getMem_id());
 			pstmt.setString(3, orderVO.getStore_id());
-			pstmt.setInt(4, orderVO.getOrder_state());
+			pstmt.setString(4, orderVO.getOrder_state());
 			pstmt.setInt(5, orderVO.getTotalprice());
-			pstmt.setInt(6, orderVO.getOrder_way());
+			pstmt.setString(6, orderVO.getOrder_way());
 			pstmt.setString(7, orderVO.getReceive_address());
 			pstmt.setBytes(8, orderVO.getQrcode());
 			pstmt.setString(9, orderVO.getOrder_note());
@@ -102,9 +102,9 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 			pstmt.setTimestamp(2, orderVO.getOrder_time());
 			pstmt.setString(3, orderVO.getMem_id());
 			pstmt.setString(4, orderVO.getStore_id());
-			pstmt.setInt(5, orderVO.getOrder_state());
+			pstmt.setString(5, orderVO.getOrder_state());
 			pstmt.setInt(6, orderVO.getTotalprice());
-			pstmt.setInt(7, orderVO.getOrder_way());
+			pstmt.setString(7, orderVO.getOrder_way());
 			pstmt.setString(8, orderVO.getReceive_address());
 			pstmt.setBytes(9, orderVO.getQrcode());
 			pstmt.setString(10, orderVO.getOrder_note());
@@ -198,9 +198,9 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 				orderVO.setOrder_time(rs.getTimestamp("rec_mon"));
 				orderVO.setMem_id(rs.getString("mem_id"));
 				orderVO.setStore_id(rs.getString("store_id"));
-				orderVO.setOrder_state(rs.getInt("order_state"));
+				orderVO.setOrder_state(rs.getString("order_state"));
 				orderVO.setTotalprice(rs.getInt("totalprice"));
-				orderVO.setOrder_way(rs.getInt("order_way"));
+				orderVO.setOrder_way(rs.getString("order_way"));
 				orderVO.setReceive_address(rs.getString("receive_address"));
 				orderVO.setQrcode(rs.getBytes("qrcode"));
 				orderVO.setOrder_note(rs.getString("order_note"));
@@ -239,72 +239,6 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 		return orderVO;
 	}
 
-//	@Override
-//	public List<Store_OrderVO> getAll() {
-//		// TODO Auto-generated method stub
-//		List<Store_OrderVO> list = new ArrayList<Store_OrderVO>();
-//		Store_OrderVO orderVO = null;
-//
-//		Connection con = null;
-//		PreparedStatement pstmt = null;
-//		ResultSet rs = null;
-//		
-//		try {
-//
-//			
-//			con = ds.getConnection();
-//			pstmt = con.prepareStatement(GET_ALL_STMT);
-//			rs = pstmt.executeQuery();
-//
-//			while (rs.next()) {
-//				// empVO ï¿½]ï¿½Ù¬ï¿½ Domain objects
-//				orderVO = new Store_OrderVO();
-//				orderVO.setOrder_id(rs.getString("order_id"));
-//				orderVO.setOrder_time(rs.getTimestamp("order_time"));
-//				orderVO.setMem_id(rs.getString("mem_id"));
-//				orderVO.setStore_id(rs.getString("store_id"));
-//				orderVO.setOrder_state(rs.getInt("order_state"));
-//				orderVO.setTotalprice(rs.getInt("totalprice"));
-//				orderVO.setOrder_way(rs.getInt("order_way"));
-//				orderVO.setReceive_address(rs.getString("receive_address"));
-//				orderVO.setQrcode(rs.getBytes("qrcode"));
-//				orderVO.setOrder_note(rs.getString("order_note"));
-//				orderVO.setOrder_taketime(rs.getTimestamp("order_taketime"));
-//				list.add(orderVO); // Store the row in the list
-//			}
-//
-//			// Handle any driver errors
-//		}  catch (SQLException se) {
-//			throw new RuntimeException("A database error occured. "
-//					+ se.getMessage());
-//			// Clean up JDBC resources
-//		} finally {
-//			if (rs != null) {
-//				try {
-//					rs.close();
-//				} catch (SQLException se) {
-//					se.printStackTrace(System.err);
-//				}
-//			}
-//			if (pstmt != null) {
-//				try {
-//					pstmt.close();
-//				} catch (SQLException se) {
-//					se.printStackTrace(System.err);
-//				}
-//			}
-//			if (con != null) {
-//				try {
-//					con.close();
-//				} catch (Exception e) {
-//					e.printStackTrace(System.err);
-//				}
-//			}
-//		}
-//		
-//		return list;
-//	}
-	
 	@Override
 	public List<Store_OrderVO> getAll() {
 		// TODO Auto-generated method stub
@@ -319,8 +253,7 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 
 			
 			con = ds.getConnection();
-			pstmt = con.prepareStatement(GET_ALL_BY_MEMID);
-			pstmt.setString(1, "MEM-000001");
+			pstmt = con.prepareStatement(GET_ALL_STMT);
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
@@ -330,9 +263,76 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 				orderVO.setOrder_time(rs.getTimestamp("order_time"));
 				orderVO.setMem_id(rs.getString("mem_id"));
 				orderVO.setStore_id(rs.getString("store_id"));
-				orderVO.setOrder_state(rs.getInt("order_state"));
+				orderVO.setOrder_state(rs.getString("order_state"));
 				orderVO.setTotalprice(rs.getInt("totalprice"));
-				orderVO.setOrder_way(rs.getInt("order_way"));
+				orderVO.setOrder_way(rs.getString("order_way"));
+				orderVO.setReceive_address(rs.getString("receive_address"));
+				orderVO.setQrcode(rs.getBytes("qrcode"));
+				orderVO.setOrder_note(rs.getString("order_note"));
+				orderVO.setOrder_taketime(rs.getTimestamp("order_taketime"));
+				list.add(orderVO); // Store the row in the list
+			}
+
+			// Handle any driver errors
+		}  catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		
+		return list;
+	}
+	
+	@Override
+	public List<Store_OrderVO> getAll(String memid) {
+		// TODO Auto-generated method stub
+		List<Store_OrderVO> list = new ArrayList<Store_OrderVO>();
+		Store_OrderVO orderVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+
+			
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ALL_BY_MEMID);
+			pstmt.setString(1, memid);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// empVO ï¿½]ï¿½Ù¬ï¿½ Domain objects
+				orderVO = new Store_OrderVO();
+				orderVO.setOrder_id(rs.getString("order_id"));
+				orderVO.setOrder_time(rs.getTimestamp("order_time"));
+				orderVO.setMem_id(rs.getString("mem_id"));
+				orderVO.setStore_id(rs.getString("store_id"));
+				orderVO.setOrder_state(rs.getString("order_state"));
+				orderVO.setTotalprice(rs.getInt("totalprice"));
+				orderVO.setOrder_way(rs.getString("order_way"));
 				orderVO.setStore_name(rs.getString("store_name"));
 				list.add(orderVO); // Store the row in the list
 			}
@@ -369,7 +369,7 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 		return list;
 	}
 	
-	public List<Store_OrderVO> getByState() {
+	public List<Store_OrderVO> getByState(String memid) {
 		// TODO Auto-generated method stub
 		List<Store_OrderVO> list = new ArrayList<Store_OrderVO>();
 		Store_OrderVO orderVO = null;
@@ -383,8 +383,8 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 			
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ALL_BY_STATE_MEMEID);
-			pstmt.setString(1, "MEM-000001");
-			pstmt.setString(2, "3");
+			pstmt.setString(1, memid);
+			pstmt.setString(2, "¥¼¨úÀ\");
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
@@ -394,9 +394,9 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 				orderVO.setOrder_time(rs.getTimestamp("order_time"));
 				orderVO.setMem_id(rs.getString("mem_id"));
 				orderVO.setStore_id(rs.getString("store_id"));
-				orderVO.setOrder_state(rs.getInt("order_state"));
+				orderVO.setOrder_state(rs.getString("order_state"));
 				orderVO.setTotalprice(rs.getInt("totalprice"));
-				orderVO.setOrder_way(rs.getInt("order_way"));
+				orderVO.setOrder_way(rs.getString("order_way"));
 				orderVO.setStore_name(rs.getString("store_name"));
 				list.add(orderVO); // Store the row in the list
 			}
@@ -433,7 +433,7 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 		return list;
 	}
 	
-	public List<Store_OrderVO> getBycomState() {
+	public List<Store_OrderVO> getBycomState(String memid) {
 		// TODO Auto-generated method stub
 		List<Store_OrderVO> list = new ArrayList<Store_OrderVO>();
 		Store_OrderVO orderVO = null;
@@ -447,8 +447,8 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 			
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ALL_BY_COMSTATE_MEMEID);
-			pstmt.setString(1, "MEM-000001");
-			pstmt.setString(2, "4");
+			pstmt.setString(1, memid);
+			pstmt.setString(2, "¤w¨úÀ\");
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
@@ -458,9 +458,9 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 				orderVO.setOrder_time(rs.getTimestamp("order_time"));
 				orderVO.setMem_id(rs.getString("mem_id"));
 				orderVO.setStore_id(rs.getString("store_id"));
-				orderVO.setOrder_state(rs.getInt("order_state"));
+				orderVO.setOrder_state(rs.getString("order_state"));
 				orderVO.setTotalprice(rs.getInt("totalprice"));
-				orderVO.setOrder_way(rs.getInt("order_way"));
+				orderVO.setOrder_way(rs.getString("order_way"));
 				orderVO.setStore_name(rs.getString("store_name"));
 				list.add(orderVO); // Store the row in the list
 			}
@@ -496,4 +496,6 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 		
 		return list;
 	}
+
+
 }

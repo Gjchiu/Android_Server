@@ -42,18 +42,20 @@ public class Store_OrderServlet extends HttpServlet{
 				JsonObject.class);
 		Store_OrderDAO orderDao = new Store_OrderDAO();
 		String action = jsonObject.get("action").getAsString();
+		String memid = jsonObject.get("memid").getAsString();
 		System.out.println("action: " + action);
+		System.out.println("memid: " + memid);
 
 		if (action.equals("getAll")) {
-			List<Store_OrderVO> orderList = orderDao.getAll();
+			List<Store_OrderVO> orderList = orderDao.getAll(memid);
 			writeText(response, gson.toJson(orderList));
 		}
 		if (action.equals("getByState")) {
-			List<Store_OrderVO> orderList = orderDao.getByState();
+			List<Store_OrderVO> orderList = orderDao.getByState(memid);
 			writeText(response, gson.toJson(orderList));
 		}
 		if (action.equals("getBycomState")) {
-			List<Store_OrderVO> orderList = orderDao.getBycomState();
+			List<Store_OrderVO> orderList = orderDao.getBycomState(memid);
 			writeText(response, gson.toJson(orderList));
 		}
 	}
