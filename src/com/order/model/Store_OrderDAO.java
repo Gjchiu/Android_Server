@@ -384,7 +384,7 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ALL_BY_STATE_MEMEID);
 			pstmt.setString(1, memid);
-			pstmt.setString(2, "•º®˙¿\");
+			pstmt.setString(2, "Â∑≤Á¢∫Ë™ç");
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
@@ -448,7 +448,7 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ALL_BY_COMSTATE_MEMEID);
 			pstmt.setString(1, memid);
-			pstmt.setString(2, "§w®˙¿\");
+			pstmt.setString(2, "Â∑≤ÂèñÈ§ê");
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
