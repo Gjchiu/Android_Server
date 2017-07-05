@@ -48,7 +48,9 @@ public class MemberServlet extends HttpServlet {
 			writeText(response, gson.toJson(memberVO));
 		}
 		if (action.equals("updatePw")) {
-			memberDao.update(memberVO);
+			String password = jsonObject.get("password").getAsString();
+			memberDao.updatePw(account, password);
+			MemberVO memberVO = memberDao.findByPrimaryKey(account);
 			writeText(response, gson.toJson(memberVO));
 		}
 	}

@@ -75,7 +75,7 @@ public class MemberDAO implements MemberDAO_interface{
 
 		try {
 			con = ds.getConnection();
-			pstmt = con.prepareStatement(UPDATEPW_STMT);
+			pstmt = con.prepareStatement(UPDATE_STMT);
 
 			pstmt.setString(1, memberVO.getMem_name());
 			pstmt.setString(2, memberVO.getMem_phone());
@@ -233,6 +233,38 @@ public class MemberDAO implements MemberDAO_interface{
 		return memberlist;
 	
 	}
+
+
+	public void updatePw(String mail,String password) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(UPDATEPW_STMT);
+
+			pstmt.setString(1, password);
+			pstmt.setString(2, mail);
+
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
+	}
+
 	
 	
 	
