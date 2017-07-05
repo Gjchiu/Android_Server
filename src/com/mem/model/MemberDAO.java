@@ -29,6 +29,7 @@ public class MemberDAO implements MemberDAO_interface{
 	
 	private static final String INSERT_STMT = "INSERT into MEMBER (mem_id,mem_name,mem_phone,mem_pw,mem_mail,mem_state)VALUES('MEM'||'-'||LPAD(to_char(mem_seq.NEXTVAL),6,'0'),?,?,?,?,0)";
 	private static final String UPDATE_STMT = "UPDATE MEMBER set mem_name=?, mem_phone=?, mem_pw=?, mem_mail=? where mem_id = ?";
+	private static final String UPDATEPW_STMT = "UPDATE MEMBER set mem_pw=? where mem_mail = ?";
 	private static final String DELETE = "DELETE FROM MEMBER where mem_id = ?";
 	private static final String Find_by_PK = "select * from MEMBER where MEM_MAIL=?";
 	private static final String Find_ALL = "select * from MEMBER ";
@@ -74,7 +75,7 @@ public class MemberDAO implements MemberDAO_interface{
 
 		try {
 			con = ds.getConnection();
-			pstmt = con.prepareStatement(UPDATE_STMT);
+			pstmt = con.prepareStatement(UPDATEPW_STMT);
 
 			pstmt.setString(1, memberVO.getMem_name());
 			pstmt.setString(2, memberVO.getMem_phone());

@@ -47,6 +47,10 @@ public class MemberServlet extends HttpServlet {
 			MemberVO memberVO = memberDao.findByPrimaryKey(account);
 			writeText(response, gson.toJson(memberVO));
 		}
+		if (action.equals("updatePw")) {
+			memberDao.update(memberVO);
+			writeText(response, gson.toJson(memberVO));
+		}
 	}
 	private void writeText(HttpServletResponse response, String outText)
 			throws IOException {
