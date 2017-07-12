@@ -39,16 +39,26 @@ public class MemberServlet extends HttpServlet {
 				JsonObject.class);
 		MemberDAO memberDao = new MemberDAO();
 		String action = jsonObject.get("action").getAsString();
-		String account = jsonObject.get("account").getAsString();
-		System.out.println(account);
-//		System.out.println("action: " + action);
+		System.out.println("action: " + action);
 
 		if (action.equals("getMember")) {
+			String account = jsonObject.get("account").getAsString();
+			System.out.println("account: " + account);
+			String password = jsonObject.get("password").getAsString();
 			MemberVO memberVO = memberDao.findByPrimaryKey(account);
+			System.out.println(memberVO.getMem_pw());
+			if(memberVO.getMem_mail().equals(account)&&memberVO.getMem_pw().equals(password))
 			writeText(response, gson.toJson(memberVO));
+			else{
+				memberVO =null;
+				writeText(response, gson.toJson(memberVO));
+			}
+			
 		}
 		if (action.equals("updatePw")) {
-			String password = jsonObject.get("password").getAsString();
+			String account = jsonObject.get("account").getAsString();
+			String password = jsonObject.get("newpassword").getAsString();
+			System.out.println("newpassword: " + password);
 			memberDao.updatePw(account, password);
 			MemberVO memberVO = memberDao.findByPrimaryKey(account);
 			writeText(response, gson.toJson(memberVO));
