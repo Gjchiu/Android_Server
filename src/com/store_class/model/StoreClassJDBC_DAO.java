@@ -13,7 +13,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.product_class.model.ProductClassVO;
 import com.store.model.StoreVO;
 
 public class StoreClassJDBC_DAO implements StoreClassDAO_interface {
@@ -82,9 +81,9 @@ public class StoreClassJDBC_DAO implements StoreClassDAO_interface {
 				storeclasslist.add(scVO);
 			}
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("§ä¤£¨ìdriver" + e.getMessage());
+			throw new RuntimeException("ï¿½ä¤£ï¿½ï¿½driver" + e.getMessage());
 		} catch (SQLException se) {
-			throw new RuntimeException("µo¥Í¿ù»~" + se.getMessage());
+			throw new RuntimeException("ï¿½oï¿½Í¿ï¿½ï¿½~" + se.getMessage());
 		} finally {
 			if (rs != null) {
 				try {
@@ -115,7 +114,7 @@ public class StoreClassJDBC_DAO implements StoreClassDAO_interface {
 
 		StoreClassJDBC_DAO storeclassdao = new StoreClassJDBC_DAO();
 
-		// ­×§ï
+		// ï¿½×§ï¿½
 		StoreClassVO scVO = new StoreClassVO();
 		byte[] pic = getPictureByteArray("WebContent/FakeInfo/Salad.jpg");
 		scVO.setSc_pic(pic);

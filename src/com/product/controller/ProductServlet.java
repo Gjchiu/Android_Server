@@ -1,9 +1,11 @@
 package com.product.controller;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -18,53 +20,57 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.product.model.ProductService;
 import com.product.model.ProductVO;
+import com.store.model.StoreDAO;
 import com.store.model.StoreService;
 import com.store.model.StoreVO;
 
 
 @MultipartConfig(fileSizeThreshold = 5 * 1024 * 1024, maxFileSize = 5 * 1024 * 1024, maxRequestSize = 5 * 5 * 1024
 * 1024)
-@WebServlet("/xxx.do")
+@SuppressWarnings("serial")
+@WebServlet("/ProductServlet")
 public class ProductServlet extends HttpServlet{
 	
+	private final static String CONTENT_TYPE = "text/html; charset=UTF-8";
 
-
-	public void doGet(HttpServletRequest req, HttpServletResponse res)
-			throws ServletException, IOException {
-		doPost(req, res);
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		doPost(req,res);
 	}
 
-	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		req.setCharacterEncoding("UTF-8");
-		HttpSession session = req.getSession();
-		Vector<ProductVO> buylist = (Vector<ProductVO>) session.getAttribute("shoppingcart");
-		String action = req.getParameter("action");
+		request.setCharacterEncoding("UTF-8");
+		Gson gson = new Gson();
+		BufferedReader br = request.getReader();
+		StringBuilder jsonIn = new StringBuilder();
+		String line = null;
+		while ((line = br.readLine()) != null) {
+			jsonIn.append(line);
+		}
+		JsonObject jsonObject = gson.fromJson(jsonIn.toString(),
+				JsonObject.class);
+		StoreDAO storeDAO = new StoreDAO();
+		String action = jsonObject.get("action").getAsString();
+		System.out.println("action: " + action);
+		String area = jsonObject.get("area").getAsString();
 
+		if (action.equals("getStore")) {
+			List<ProductVO> storelist = storeDAO.findtype(area);
+			writeText(response, gson.toJson(storelist));
+		}
+	}
+	private void writeText(HttpServletResponse response, String outText)
+			throws IOException {
+		response.setContentType(CONTENT_TYPE);
+		PrintWriter out = response.getWriter();
+		System.out.println("outText: " + outText);
+		out.print(outText);
+	}
 		
-	}
-
-	private ProductVO getProduct(HttpServletRequest req) {
-
-		String pro_id = req.getParameter("pro_id");
-		String pro_name = req.getParameter("pro_name");
-		Number pro_price = Integer.parseInt(req.getParameter("pro_price"));
-		String pro_content = req.getParameter("pro_content");
-		String store_id = req.getParameter("store_id");
-		Number quantity =Integer.parseInt(req.getParameter("quantity"));
-
-		ProductVO productVO = new ProductVO();
-
-		productVO.setPro_id(pro_id);
-		productVO.setPro_name(pro_name);
-		productVO.setPro_price(pro_price);
-		productVO.setPro_content(pro_content);
-		productVO.setStore_id(store_id);
-		productVO.setQuantity(quantity);
-		return productVO;
-	}
 	public static byte[] getPictureByteArrayFromWeb(Part part) throws IOException {
 		InputStream is = part.getInputStream();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
