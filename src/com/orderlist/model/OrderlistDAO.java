@@ -13,11 +13,12 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.order.model.Store_OrderVO;
 import com.orderlist.model.OrderlistVO;
 import com.sun.org.apache.xpath.internal.operations.Or;
 
-public class OrderlistDAO implements OrderlistDAO_interface{
-	
+public class OrderlistDAO implements OrderlistDAO_interface {
+
 	private static DataSource ds = null;
 	static {
 		try {
@@ -27,24 +28,20 @@ public class OrderlistDAO implements OrderlistDAO_interface{
 			e.printStackTrace();
 		}
 	}
-	
-	private static final String INSERT_STMT = 
-			"INSERT INTO orderlist (order_id, pro_id,order_amount, price) VALUES (?, ?, ?, ?)";
-		private static final String GET_ALL_STMT = 
-			"SELECT order_id, pro_id,order_amount, price FROM orderlist order by orderlist";
-		private static final String GET_ONE_STMT = 
-			"SELECT order_id, pro_id,order_amount, price FROM orderlist where order_id = ? ";
-		private static final String DELETE = 
-			"DELETE FROM orderlist where order_id = ? and pro_id=?";
-		private static final String UPDATE = 
-			"UPDATE orderlist set order_amount, price where order_id=? and pro_id=?";
-		
-		private static final String GET_DETAIL_ORDER_BY_ORDER_ID = 
-			"select p.pro_name, o.price, o.order_amount from orderlist o join product p on o.pro_id = p.pro_id where o.order_id = ? and o.pro_id=?";
-		
-		/*******************OrderDetailByOrderId�� from OrderListServlet.java********************************/
-		private static final String GET_DETAIL_PROID_BY_ORDER_ID = 
-			"select pro_id from orderlist where order_id=?";
+
+	private static final String INSERT_STMT = "INSERT INTO orderlist (order_id, pro_id,order_amount, price) VALUES (?, ?, ?, ?)";
+	private static final String GET_ALL_STMT = "SELECT order_id, pro_id,order_amount, price FROM orderlist order by orderlist";
+	private static final String GET_ONE_STMT = "SELECT order_id, pro_id,order_amount, price FROM orderlist where order_id = ? ";
+	private static final String DELETE = "DELETE FROM orderlist where order_id = ? and pro_id=?";
+	private static final String UPDATE = "UPDATE orderlist set order_amount, price where order_id=? and pro_id=?";
+
+	private static final String GET_DETAIL_ORDER_BY_ORDER_ID = "select p.pro_name, o.price, o.order_amount from orderlist o join product p on o.pro_id = p.pro_id where o.order_id = ? and o.pro_id=?";
+
+	/*******************
+	 * OrderDetailByOrderId�� from OrderListServlet.java
+	 ********************************/
+	private static final String GET_DETAIL_PROID_BY_ORDER_ID = "select pro_id from orderlist where order_id=?";
+
 	@Override
 	public void insert(OrderlistVO orderlistVO) {
 		// TODO Auto-generated method stub
@@ -59,15 +56,13 @@ public class OrderlistDAO implements OrderlistDAO_interface{
 			pstmt.setString(1, orderlistVO.getOrder_id());
 			pstmt.setString(2, orderlistVO.getPro_id());
 			pstmt.setInt(3, orderlistVO.getOrder_amount());
-			pstmt.setInt(4,orderlistVO.getPrice());
-			
+			pstmt.setInt(4, orderlistVO.getPrice());
 
 			pstmt.executeUpdate();
 
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -105,8 +100,7 @@ public class OrderlistDAO implements OrderlistDAO_interface{
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -125,7 +119,6 @@ public class OrderlistDAO implements OrderlistDAO_interface{
 			}
 		}
 
-		
 	}
 
 	@Override
@@ -146,8 +139,7 @@ public class OrderlistDAO implements OrderlistDAO_interface{
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -175,7 +167,7 @@ public class OrderlistDAO implements OrderlistDAO_interface{
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		List<OrderlistVO> list=new LinkedList<OrderlistVO>();
+		List<OrderlistVO> list = new LinkedList<OrderlistVO>();
 		try {
 
 			con = ds.getConnection();
@@ -196,8 +188,7 @@ public class OrderlistDAO implements OrderlistDAO_interface{
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -242,7 +233,7 @@ public class OrderlistDAO implements OrderlistDAO_interface{
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				// empVO �]�٬� Domain objects
+				// empVO �]�٬� Domain objects
 				orderlistVO = new OrderlistVO();
 				orderlistVO.setOrder_id(rs.getString("order_id"));
 				orderlistVO.setPro_id(rs.getString("pro_id"));
@@ -253,8 +244,7 @@ public class OrderlistDAO implements OrderlistDAO_interface{
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -281,7 +271,7 @@ public class OrderlistDAO implements OrderlistDAO_interface{
 		}
 		return list;
 	}
-	
+
 	@Override
 	public List<OrderlistVO> getDetailOrder(String order_id, String pro_id) {
 		// TODO Auto-generated method stub
@@ -293,21 +283,19 @@ public class OrderlistDAO implements OrderlistDAO_interface{
 		ResultSet rs = null;
 
 		try {
-			
-			System.out.println(" order_id: " + order_id +" pro_id: " + pro_id);
+
+			System.out.println(" order_id: " + order_id + " pro_id: " + pro_id);
 
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_DETAIL_ORDER_BY_ORDER_ID);
-			
-			
-			
+
 			pstmt.setString(1, order_id);
 			pstmt.setString(2, pro_id);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				orderlistVO = new OrderlistVO();
-//				orderlistVO.setOrder_id(rs.getString("order_id"));
-//				orderlistVO.setPro_id(rs.getString("pro_id"));
+				// orderlistVO.setOrder_id(rs.getString("order_id"));
+				// orderlistVO.setPro_id(rs.getString("pro_id"));
 				orderlistVO.setOrder_amount(rs.getInt("order_amount"));
 				orderlistVO.setPrice(rs.getInt("price"));
 				orderlistVO.setPro_name(rs.getString("pro_name"));
@@ -315,8 +303,7 @@ public class OrderlistDAO implements OrderlistDAO_interface{
 			}
 			// Handle any driver errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -343,7 +330,10 @@ public class OrderlistDAO implements OrderlistDAO_interface{
 		}
 		return list;
 	}
-	/*******************OrderDetailByOrderId�� from OrderListServlet.java********************************/
+
+	/*******************
+	 * OrderDetailByOrderId�� from OrderListServlet.java
+	 ********************************/
 	@Override
 	public String getDetailProIdByOrderId(String order_id) {
 		// TODO Auto-generated method stub
@@ -351,22 +341,21 @@ public class OrderlistDAO implements OrderlistDAO_interface{
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String proId = "";
-		
+
 		try {
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_DETAIL_PROID_BY_ORDER_ID);
 			pstmt.setString(1, order_id);
 			rs = pstmt.executeQuery();
-			while(rs.next()){
+			while (rs.next()) {
 				proId = rs.getString("pro_id");
-	
+
 				System.out.println("proID : " + proId);
 			}
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -388,4 +377,45 @@ public class OrderlistDAO implements OrderlistDAO_interface{
 
 	}
 
+	@Override
+	public void insert2(OrderlistVO orderlistVO, Connection con) {
+		// TODO Auto-generated method stub
+
+		PreparedStatement pstmt = null;
+
+		try {
+
+			pstmt = con.prepareStatement(INSERT_STMT);
+			pstmt.setString(1, orderlistVO.getOrder_id());
+			pstmt.setString(2, orderlistVO.getPro_id());
+			pstmt.setInt(3, orderlistVO.getOrder_amount());
+			pstmt.setInt(4, orderlistVO.getPrice());
+
+			pstmt.executeUpdate();
+
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			if (con != null) {
+				try {
+					// 3●設定於當有exception發生時之catch區塊內
+					System.err.print("Transaction is being ");
+					System.err.println("rolled back-由-emp");
+					con.rollback();
+				} catch (SQLException excep) {
+					throw new RuntimeException("rollback error occured. " + excep.getMessage());
+				}
+			}
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+		}
+
+	}
 }

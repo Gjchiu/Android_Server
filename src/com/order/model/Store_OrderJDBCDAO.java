@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import com.orderlist.model.OrderlistVO;
 
 
 
@@ -489,6 +492,13 @@ public static void main(String[] args) throws IOException{
 public List<Store_OrderVO> getAll(String memid) {
 	// TODO Auto-generated method stub
 	return null;
+}
+
+
+@Override
+public void insertWithOrderlist(Store_OrderVO OrderVO, List<OrderlistVO> list) {
+	// TODO Auto-generated method stub
+	
 }
 
 }

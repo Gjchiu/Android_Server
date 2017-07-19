@@ -340,4 +340,10 @@ public String getDetailProIdByOrderId(String order_id) {
 	/*�аѦ�JDBC*/
 	return null;
 }
+
+@Override
+public void insert2(OrderlistVO orderlistVO, Connection con) {
+	// TODO Auto-generated method stub
+	
+}
 }
