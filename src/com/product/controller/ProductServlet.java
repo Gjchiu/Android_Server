@@ -22,6 +22,7 @@ import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.product.model.ProductDAO;
 import com.product.model.ProductService;
 import com.product.model.ProductVO;
 import com.store.model.StoreDAO;
@@ -53,14 +54,14 @@ public class ProductServlet extends HttpServlet{
 		}
 		JsonObject jsonObject = gson.fromJson(jsonIn.toString(),
 				JsonObject.class);
-		StoreDAO storeDAO = new StoreDAO();
+		ProductDAO productDAO = new ProductDAO();
 		String action = jsonObject.get("action").getAsString();
 		System.out.println("action: " + action);
-		String area = jsonObject.get("area").getAsString();
+		String storeid = jsonObject.get("storeid").getAsString();
 
-		if (action.equals("getStore")) {
-			List<ProductVO> storelist = storeDAO.findtype(area);
-			writeText(response, gson.toJson(storelist));
+		if (action.equals("getpro")) {
+			List<ProductVO> productlist = productDAO.findProductByStore_id(storeid);
+			writeText(response, gson.toJson(productlist));
 		}
 	}
 	private void writeText(HttpServletResponse response, String outText)
