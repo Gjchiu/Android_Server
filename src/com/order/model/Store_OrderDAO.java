@@ -31,8 +31,8 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 	}
 	
 	private static final String INSERT_STMT = 
-			"INSERT INTO order (order_id, order_time, mem_id, store_id, order_state, totalprice, order_way, receive_address, qrcode, order_note, order_taketime) "
-			         + "VALUES (to_char(sysdate,'YYYYmmdd')||'-'||LPAD(to_char(order_seq.NEXTVAL),6,'0'),?,?,?,?,?,?,?,?,?,?)";
+			"INSERT INTO store_order (order_id, mem_id, store_id, totalprice, order_way, receive_address, order_note, order_taketime) "
+			         + "VALUES (to_char(sysdate,'YYYYmmdd')||'-'||LPAD(to_char(order_seq.NEXTVAL),6,'0'),?,?,?,?,?,?,?)";
 	private static final String UPDATE = 
 			"UPDATE order set order_id=?, order_time=?, mem_id=?, store_id=?, order_state=?, totalprice=?, order_way=?, receive_address=?, qrcode=?, order_note=?, order_taketime=?";
 	private static final String DELETE = 
@@ -42,7 +42,7 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 	private static final String GET_ALL_STMT = 
 			"SELECT order_id, order_time, mem_id, store_id, order_state, totalprice, order_way, receive_address, qrcode, order_note, order_taketime from store_order order order by order_time desc";
 	private static final String GET_ALL_BY_MEMID = "select o.mem_id, o.order_id, o.store_id, o.totalprice, o.order_time, o.order_way, o.order_state ,s.store_name from store_order o join store s on o.store_id = s.store_id where mem_id = ? order by order_time desc";
-	private static final String GET_ALL_BY_STATE_MEMEID = "select o.mem_id, o.order_id, o.store_id, o.totalprice, o.order_time, o.order_way, o.order_state ,s.store_name from store_order o join store s on o.store_id = s.store_id where mem_id = ? and order_state =? order by order_time desc";
+	private static final String GET_ALL_BY_STATE_MEMEID = "select o.mem_id, o.order_id, o.store_id, o.totalprice, o.order_time, o.order_way, o.order_state ,s.store_name from store_order o join store s on o.store_id = s.store_id where mem_id = ? and  not(order_state = ?)  order by order_time desc";
 
 	@Override
 	public void insert(Store_OrderVO orderVO) {
@@ -388,7 +388,7 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ALL_BY_STATE_MEMEID);
 			pstmt.setString(1, memid);
-			pstmt.setString(2, "已確認");
+			pstmt.setString(2, "已取餐");
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
@@ -582,16 +582,13 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
     		// 先新增部門
 			String cols[] = {"ORDER_ID"};
 			pstmt = con.prepareStatement(INSERT_STMT , cols);			
-			pstmt.setTimestamp(1, orderVO.getOrder_time());
-			pstmt.setString(2, orderVO.getMem_id());
-			pstmt.setString(3, orderVO.getStore_id());
-			pstmt.setString(4, orderVO.getOrder_state());
-			pstmt.setInt(5, orderVO.getTotalprice());
-			pstmt.setString(6, orderVO.getOrder_way());
-			pstmt.setString(7, orderVO.getReceive_address());
-			pstmt.setBytes(8, orderVO.getQrcode());
-			pstmt.setString(9, orderVO.getOrder_note());
-			pstmt.setTimestamp(10, orderVO.getOrder_taketime());
+			pstmt.setString(1, orderVO.getMem_id());
+			pstmt.setString(2, orderVO.getStore_id());
+			pstmt.setInt(3, orderVO.getTotalprice());
+			pstmt.setString(4, orderVO.getOrder_way());
+			pstmt.setString(5, orderVO.getReceive_address());
+			pstmt.setString(6, orderVO.getOrder_note());
+			pstmt.setTimestamp(7, orderVO.getOrder_taketime());
 			pstmt.executeUpdate();
 			//掘取對應的自增主鍵值
 			String next_order_id = null;

@@ -21,7 +21,7 @@ import com.order.model.Store_OrderVO;
 import com.orderlist.model.OrderlistVO;
 
 @SuppressWarnings("serial")
-@WebServlet("/Store_OrderServlet1")
+@WebServlet("/Store_OrderServlet")
 public class Store_OrderServlet extends HttpServlet{
 	private final static String CONTENT_TYPE = "text/html; charset=UTF-8";
  
