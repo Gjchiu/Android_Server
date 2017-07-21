@@ -35,6 +35,7 @@ public class StoreDAO implements StoreDAO_interface {
 	private static final String CLASSLINK = "select * from store s join store_class t on (s.sc_id = t.sc_id) where store_zone = ? and t.sc_name = ? and store_state = '開店中'";
 	private static final String UPDATE_STMT2 = "UPDATE STORE set store_phone=?, store_addr=?, store_name=?, store_state=? where store_id = ?";
 	private static final String Find_HOT = "select * from store where store_star > ? and store_state = '�}����' order by store_star desc";
+	
 	@Override
 	public void insert(StoreVO storeVO) {
 		Connection con = null;

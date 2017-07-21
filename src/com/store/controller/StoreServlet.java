@@ -56,12 +56,25 @@ public class StoreServlet extends HttpServlet {
 		StoreDAO storeDAO = new StoreDAO();
 		String action = jsonObject.get("action").getAsString();
 		System.out.println("action: " + action);
-		String area = jsonObject.get("area").getAsString();
-		String type = jsonObject.get("type").getAsString();
-		System.out.println("area: " + area);
+	
 		if (action.equals("getStore")) {
+			String area = jsonObject.get("area").getAsString();
+			String type = jsonObject.get("type").getAsString();
+			System.out.println("area: " + area);
 			List<StoreVO> storelist = storeDAO.findtype(area, type);
 			writeText(response, gson.toJson(storelist));
+		}
+		if (action.equals("getStoreAcc")) {
+			String account = jsonObject.get("account").getAsString();
+			System.out.println("account: " + account);
+			String password = jsonObject.get("password").getAsString();
+			StoreVO store = storeDAO.findByStoreAcc(account);
+			if(store.getStore_acc().equals(account)&&store.getStore_pw().equals(password))
+				writeText(response, gson.toJson(store));
+				else{
+					store =null;
+					writeText(response, gson.toJson(store));
+				}
 		}
 	}
 	private void writeText(HttpServletResponse response, String outText)

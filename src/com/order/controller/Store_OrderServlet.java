@@ -80,7 +80,14 @@ public class Store_OrderServlet extends HttpServlet{
 			orderDao.insertWithOrderlist(store_OrderVO, orderList);
 			boolean bool =true;
 			writeText(response, gson.toJson(bool));
+		}if (action.equals("update")) {
+			String orderid = jsonObject.get("orderid").getAsString();
+			String storeid = jsonObject.get("storeid").getAsString();
+			orderDao.updatestate(orderid,storeid);
+			boolean bool =true;
+			writeText(response, gson.toJson(bool));
 		}
+		
 	}
 
 	private void writeText(HttpServletResponse response, String outText)

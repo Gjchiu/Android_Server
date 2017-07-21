@@ -16,7 +16,7 @@ import com.mem.model.MemberDAO;
 import com.mem.model.MemberVO;
 
 @SuppressWarnings("serial")
-@WebServlet("/MemberServlet1")
+@WebServlet("/MemberServlet")
 public class MemberServlet extends HttpServlet {
 
 	private final static String CONTENT_TYPE = "text/html; charset=UTF-8";

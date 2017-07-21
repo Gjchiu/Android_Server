@@ -42,8 +42,10 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 	private static final String GET_ALL_STMT = 
 			"SELECT order_id, order_time, mem_id, store_id, order_state, totalprice, order_way, receive_address, qrcode, order_note, order_taketime from store_order order order by order_time desc";
 	private static final String GET_ALL_BY_MEMID = "select o.mem_id, o.order_id, o.store_id, o.totalprice, o.order_time, o.order_way, o.order_state ,s.store_name from store_order o join store s on o.store_id = s.store_id where mem_id = ? order by order_time desc";
-	private static final String GET_ALL_BY_STATE_MEMEID = "select o.mem_id, o.order_id, o.store_id, o.totalprice, o.order_time, o.order_way, o.order_state ,s.store_name from store_order o join store s on o.store_id = s.store_id where mem_id = ? and  not(order_state = ?)  order by order_time desc";
-
+	private static final String GET_ALL_BY_VOTSTATE_MEMEID = "select o.mem_id, o.order_id, o.store_id, o.totalprice, o.order_time, o.order_way, o.order_state ,s.store_name from store_order o join store s on o.store_id = s.store_id where mem_id = ? and  not(order_state = ?)  order by order_time desc";
+	private static final String GET_ALL_BY_STATE_MEMEID = "select o.mem_id, o.order_id, o.store_id, o.totalprice, o.order_time, o.order_way, o.order_state ,s.store_name from store_order o join store s on o.store_id = s.store_id where mem_id = ? and  order_state = ? order by order_time desc";
+	private static final String UPDATE_STATE = 
+			"UPDATE store_order set order_state= '已取餐' where order_id = ? and store_id = ?";
 	@Override
 	public void insert(Store_OrderVO orderVO) {
 		// TODO Auto-generated method stub
@@ -386,7 +388,7 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 
 			
 			con = ds.getConnection();
-			pstmt = con.prepareStatement(GET_ALL_BY_STATE_MEMEID);
+			pstmt = con.prepareStatement(GET_ALL_BY_VOTSTATE_MEMEID);
 			pstmt.setString(1, memid);
 			pstmt.setString(2, "已取餐");
 			rs = pstmt.executeQuery();
@@ -628,6 +630,45 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 							+ excep.getMessage());
 				}
 			}
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+	}
+	
+	public void updatestate(String orderid,String storeid) {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(UPDATE_STATE);
+			
+			pstmt.setString(1, orderid);
+			pstmt.setString(2, storeid);
+
+
+			pstmt.executeUpdate();
+
+			// Handle any driver errors
+		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
