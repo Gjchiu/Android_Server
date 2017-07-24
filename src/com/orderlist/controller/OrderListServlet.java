@@ -1,74 +1,64 @@
 package com.orderlist.controller;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.util.*;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+import com.order.model.Store_OrderDAO;
+import com.order.model.Store_OrderVO;
+import com.orderlist.model.OrderlistDAO;
 import com.orderlist.model.OrderlistService;
 import com.orderlist.model.OrderlistVO;
 
+@SuppressWarnings("serial")
+@WebServlet("/OrderListServlet")
 public class OrderListServlet extends HttpServlet {
-
-	public void doGet(HttpServletRequest req, HttpServletResponse res)
+	private final static String CONTENT_TYPE = "text/html; charset=UTF-8";
+	 
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		doPost(req, res);
+		doPost(request,response);
 	}
 
-	public void doPost(HttpServletRequest req, HttpServletResponse res)
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		req.setCharacterEncoding("UTF-8");
-		String action = req.getParameter("action");
+		request.setCharacterEncoding("UTF-8");
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+		BufferedReader br = request.getReader();
+		StringBuilder jsonIn = new StringBuilder();
+		String line = null;
+		while ((line = br.readLine()) != null) {
+			jsonIn.append(line);
+		}
+		JsonObject jsonObject = gson.fromJson(jsonIn.toString(),
+				JsonObject.class);
+		OrderlistDAO orderlistDAO = new OrderlistDAO();
+		String action = jsonObject.get("action").getAsString();
 		
-		
-		if ("getOneOrder_For_DetailDisplay".equals(action)) { 
-			
+		System.out.println("action: " + action);
 
-
-			List<String> errorMsgs = new LinkedList<String>();
-			// Store this set in the request scope, in case we need to
-			// send the ErrorPage view.
-			req.setAttribute("errorMsgs", errorMsgs);
-
-			try {
-
-				String str1 = req.getParameter("order_id");
-
-				String str2 = req.getParameter("pro_id");
-				String str3 = req.getParameter("quentity");
-
-				System.out.println(str1+" "+str2+" "+str3);
-
-				System.out.println(str1+" "+str2);
-
-				String order_id = req.getParameter("order_id");
-				System.out.println("order_id"+order_id);
-
-				OrderlistService orderSvc = new OrderlistService();
-				List<OrderlistVO> orderlistVO=new LinkedList<OrderlistVO>();
-				orderlistVO= orderSvc.getOrderlist(order_id);
-
-				
-			
-				
-				req.setAttribute("orderlistVO", orderlistVO); 
-				
-				String url = "/frontend/selectOrder/orderDetail.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url); 
-				successView.forward(req, res);
-
-			} catch (Exception e) {
-				
-				errorMsgs.add( e.getMessage());
-				RequestDispatcher failureView = req
-						.getRequestDispatcher("/frontend/selectOrder/listOrderByMem.jsp");
-				failureView.forward(req, res);
-			}
+		if (action.equals("getdetail")) {
+			String orderid = jsonObject.get("orderid").getAsString();
+			List<OrderlistVO> orderList = orderlistDAO.getDetailOrder(orderid);
+			writeText(response, gson.toJson(orderList));
 		}
 		
+	}
 
+	private void writeText(HttpServletResponse response, String outText)
+			throws IOException {
+		response.setContentType(CONTENT_TYPE);
+		PrintWriter out = response.getWriter();
+		System.out.println("outText: " + outText);
+		out.print(outText);
 	}
 }
 

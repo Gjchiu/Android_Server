@@ -36,7 +36,7 @@ public class OrderlistDAO implements OrderlistDAO_interface {
 	private static final String UPDATE = "UPDATE orderlist set order_amount, price where order_id=? and pro_id=?";
 
 	private static final String GET_DETAIL_ORDER_BY_ORDER_ID = "select p.pro_name, o.price, o.order_amount from orderlist o join product p on o.pro_id = p.pro_id where o.order_id = ? and o.pro_id=?";
-
+	private static final String GET_DETAIL_BY_ORDER_ID = "select p.pro_name, o.price, o.order_amount from orderlist o join product p on o.pro_id = p.pro_id where o.order_id = ?";
 	/*******************
 	 * OrderDetailByOrderId�� from OrderListServlet.java
 	 ********************************/
@@ -417,5 +417,61 @@ public class OrderlistDAO implements OrderlistDAO_interface {
 			}
 		}
 
+	}
+	public List<OrderlistVO> getDetailOrder(String order_id) {
+		// TODO Auto-generated method stub
+		List<OrderlistVO> list = new LinkedList<OrderlistVO>();
+		OrderlistVO orderlistVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			System.out.println(" order_id: " + order_id);
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_DETAIL_BY_ORDER_ID);
+
+			pstmt.setString(1, order_id);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				orderlistVO = new OrderlistVO();
+				// orderlistVO.setOrder_id(rs.getString("order_id"));
+				// orderlistVO.setPro_id(rs.getString("pro_id"));
+				orderlistVO.setOrder_amount(rs.getInt("order_amount"));
+				orderlistVO.setPrice(rs.getInt("price"));
+				orderlistVO.setPro_name(rs.getString("pro_name"));
+				list.add(orderlistVO); // Store the row in the list
+			}
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
 	}
 }

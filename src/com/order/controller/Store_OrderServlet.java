@@ -57,7 +57,8 @@ public class Store_OrderServlet extends HttpServlet{
 		}
 		if (action.equals("getByState")) {
 			String memid = jsonObject.get("memid").getAsString();
-			List<Store_OrderVO> orderList = orderDao.getByState(memid);
+			String state = jsonObject.get("state").getAsString();
+			List<Store_OrderVO> orderList = orderDao.getByState(memid,state);
 			writeText(response, gson.toJson(orderList));
 		}
 		if (action.equals("getBycomState")) {
@@ -86,6 +87,18 @@ public class Store_OrderServlet extends HttpServlet{
 			orderDao.updatestate(orderid,storeid);
 			boolean bool =true;
 			writeText(response, gson.toJson(bool));
+		}
+		
+		if (action.equals("storegetByState")) {
+			String storeid = jsonObject.get("storeid").getAsString();
+			String state = jsonObject.get("state").getAsString();
+			List<Store_OrderVO> orderList = orderDao.storegetByState(storeid,state);
+			writeText(response, gson.toJson(orderList));
+		}
+		if (action.equals("getByorderid")) {
+			String orderid = jsonObject.get("orderid").getAsString();
+			Store_OrderVO order = orderDao.findByPrimaryKey(orderid);
+			writeText(response, gson.toJson(order));
 		}
 		
 	}

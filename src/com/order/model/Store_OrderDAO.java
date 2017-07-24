@@ -42,10 +42,12 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 	private static final String GET_ALL_STMT = 
 			"SELECT order_id, order_time, mem_id, store_id, order_state, totalprice, order_way, receive_address, qrcode, order_note, order_taketime from store_order order order by order_time desc";
 	private static final String GET_ALL_BY_MEMID = "select o.mem_id, o.order_id, o.store_id, o.totalprice, o.order_time, o.order_way, o.order_state ,s.store_name from store_order o join store s on o.store_id = s.store_id where mem_id = ? order by order_time desc";
-	private static final String GET_ALL_BY_VOTSTATE_MEMEID = "select o.mem_id, o.order_id, o.store_id, o.totalprice, o.order_time, o.order_way, o.order_state ,s.store_name from store_order o join store s on o.store_id = s.store_id where mem_id = ? and  not(order_state = ?)  order by order_time desc";
+	private static final String GET_ALL_BY_VOTSTATE_MEMEID = "select o.mem_id, o.order_id, o.store_id, o.totalprice, o.order_time, o.order_way, o.order_state ,s.store_name from store_order o join store s on o.store_id = s.store_id where mem_id = ? and  order_state = ?  order by order_time desc";
 	private static final String GET_ALL_BY_STATE_MEMEID = "select o.mem_id, o.order_id, o.store_id, o.totalprice, o.order_time, o.order_way, o.order_state ,s.store_name from store_order o join store s on o.store_id = s.store_id where mem_id = ? and  order_state = ? order by order_time desc";
 	private static final String UPDATE_STATE = 
 			"UPDATE store_order set order_state= '已取餐' where order_id = ? and store_id = ?";
+	private static final String GET_ALL_BY_STATE_STOREID = "select o.mem_id, o.order_id, o.store_id, o.totalprice, o.order_time, o.order_way, o.order_state ,s.store_name from store_order o join store s on o.store_id = s.store_id "
+																+ "where o.store_id = ? and  order_state = ?  order by order_time desc";
 	@Override
 	public void insert(Store_OrderVO orderVO) {
 		// TODO Auto-generated method stub
@@ -375,7 +377,7 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 		return list;
 	}
 	
-	public List<Store_OrderVO> getByState(String memid) {
+	public List<Store_OrderVO> getByState(String memid,String state) {
 		// TODO Auto-generated method stub
 		List<Store_OrderVO> list = new ArrayList<Store_OrderVO>();
 		Store_OrderVO orderVO = null;
@@ -390,7 +392,7 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ALL_BY_VOTSTATE_MEMEID);
 			pstmt.setString(1, memid);
-			pstmt.setString(2, "已取餐");
+			pstmt.setString(2, state);
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
@@ -689,6 +691,72 @@ public class Store_OrderDAO implements Store_OrderDAO_interface{
 			}
 		}
 	}
+	
+	public List<Store_OrderVO> storegetByState(String storeid,String state) {
+		// TODO Auto-generated method stub
+		List<Store_OrderVO> list = new ArrayList<Store_OrderVO>();
+		Store_OrderVO orderVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+
+			
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ALL_BY_STATE_STOREID);
+			pstmt.setString(1, storeid);
+			pstmt.setString(2, state);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// empVO �]�٬� Domain objects
+				orderVO = new Store_OrderVO();
+				orderVO.setOrder_id(rs.getString("order_id"));
+				orderVO.setOrder_time(rs.getTimestamp("order_time"));
+				orderVO.setMem_id(rs.getString("mem_id"));
+				orderVO.setStore_id(rs.getString("store_id"));
+				orderVO.setOrder_state(rs.getString("order_state"));
+				orderVO.setTotalprice(rs.getInt("totalprice"));
+				orderVO.setOrder_way(rs.getString("order_way"));
+				orderVO.setStore_name(rs.getString("store_name"));
+				list.add(orderVO); // Store the row in the list
+			}
+
+			// Handle any driver errors
+		}  catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		
+		return list;
+	}
+	
+	
 
 
 }
