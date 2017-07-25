@@ -12,7 +12,6 @@ public class Store_OrderVO implements Serializable{
 	private Integer totalprice;
 	private String order_way;
 	private String receive_address;
-	private byte[] qrcode;
 	private String order_note;
 	private Timestamp order_taketime;
 	private String store_name;
@@ -91,14 +90,6 @@ public class Store_OrderVO implements Serializable{
 
 	public void setReceive_address(String receive_address) {
 		this.receive_address = receive_address;
-	}
-
-	public byte[] getQrcode() {
-		return qrcode;
-	}
-
-	public void setQrcode(byte[] qrcode) {
-		this.qrcode = qrcode;
 	}
 
 	public String getOrder_note() {
