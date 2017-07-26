@@ -34,7 +34,7 @@ public class ProductDAO implements ProductDAO_interface {
 	private static final String Find_ALL = "select * from PRODUCT ";
 	private static final String Find_NAME = "select * from PRODUCT where pro_name like ?  and pro_state = '�W�['";
 	private static final String CLASSLINK = "select c.pc_id, c.pc_name, p.pro_id, p.pro_name, p.pro_price, p.store_id from product p join product_class c on (p.pc_id = c.pc_id) where p.pc_id = ?  and pro_state = '�W�['";
-	private static final String Find_By_Store_id = "select * from product where store_id = ? and pro_state = '上架中'";
+	private static final String Find_By_Store_id = "select * from product where store_id = ? and pro_state = '上架'";
 	private static final String Find_All_By_Store_id = "select * from product where store_id = ?";
 
 	@Override
@@ -374,7 +374,7 @@ public class ProductDAO implements ProductDAO_interface {
 				proVO.setPro_id(rs.getString("Pro_id"));
 				proVO.setPro_name(rs.getString("Pro_name"));
 				proVO.setPro_price(rs.getInt("Pro_price"));
-
+				proVO.setPro_image(rs.getBytes("Pro_image"));
 				proVO.setPro_content(rs.getString("Pro_content"));
 				productlist.add(proVO);
 			}

@@ -29,6 +29,8 @@ import com.product.model.ProductVO;
 import com.store.model.StoreDAO;
 import com.store.model.StoreService;
 import com.store.model.StoreVO;
+
+import idv.ron.server.main.ImageUtil;
 @MultipartConfig(fileSizeThreshold = 5 * 1024 * 1024, maxFileSize = 5 * 1024 * 1024, maxRequestSize = 5 * 5 * 1024
 * 1024)
 @SuppressWarnings("serial")
@@ -62,6 +64,11 @@ public class StoreServlet extends HttpServlet {
 			String type = jsonObject.get("type").getAsString();
 			System.out.println("area: " + area);
 			List<StoreVO> storelist = storeDAO.findtype(area, type);
+			for(StoreVO pro : storelist){
+				if(pro.getStore_image()==null)
+					break;
+				pro.setStore_image(ImageUtil.shrink(pro.getStore_image(), 128));
+			}
 			writeText(response, gson.toJson(storelist));
 		}
 		if (action.equals("getStoreAcc")) {
@@ -69,9 +76,10 @@ public class StoreServlet extends HttpServlet {
 			System.out.println("account: " + account);
 			String password = jsonObject.get("password").getAsString();
 			StoreVO store = storeDAO.findByStoreAcc(account);
-			if(store.getStore_acc().equals(account)&&store.getStore_pw().equals(password))
+			if(store.getStore_acc().equals(account)&&store.getStore_pw().equals(password)){
+				store.setStore_image(ImageUtil.shrink(store.getStore_image(), 128));
 				writeText(response, gson.toJson(store));
-				else{
+			}else{
 					store =null;
 					writeText(response, gson.toJson(store));
 				}

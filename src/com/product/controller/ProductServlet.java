@@ -29,6 +29,8 @@ import com.store.model.StoreDAO;
 import com.store.model.StoreService;
 import com.store.model.StoreVO;
 
+import idv.ron.server.main.ImageUtil;
+
 
 @MultipartConfig(fileSizeThreshold = 5 * 1024 * 1024, maxFileSize = 5 * 1024 * 1024, maxRequestSize = 5 * 5 * 1024
 * 1024)
@@ -58,9 +60,14 @@ public class ProductServlet extends HttpServlet{
 		String action = jsonObject.get("action").getAsString();
 		System.out.println("action: " + action);
 		String storeid = jsonObject.get("storeid").getAsString();
-
+		
 		if (action.equals("getpro")) {
 			List<ProductVO> productlist = productDAO.findProductByStore_id(storeid);
+			for(ProductVO pro : productlist){
+				if(pro.getPro_image()==null)
+					break;
+				pro.setPro_image(ImageUtil.shrink(pro.getPro_image(), 128));
+			}
 			writeText(response, gson.toJson(productlist));
 		}
 	}

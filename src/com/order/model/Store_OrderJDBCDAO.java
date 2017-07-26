@@ -61,7 +61,6 @@ public class Store_OrderJDBCDAO implements Store_OrderDAO_interface{
 			pstmt.setInt(5, orderVO.getTotalprice());
 			pstmt.setString(6, orderVO.getOrder_way());
 			pstmt.setString(7, orderVO.getReceive_address());
-			pstmt.setBytes(8, orderVO.getQrcode());
 			pstmt.setString(9, orderVO.getOrder_note());
 			pstmt.setTimestamp(10, orderVO.getOrder_taketime());
 			pstmt.executeUpdate();
@@ -113,7 +112,6 @@ public class Store_OrderJDBCDAO implements Store_OrderDAO_interface{
 			pstmt.setInt(6, orderVO.getTotalprice());
 			pstmt.setString(7, orderVO.getOrder_way());
 			pstmt.setString(8, orderVO.getReceive_address());
-			pstmt.setBytes(9, orderVO.getQrcode());
 			pstmt.setString(10, orderVO.getOrder_note());
 			pstmt.setTimestamp(11, orderVO.getOrder_taketime());
 
@@ -219,7 +217,6 @@ public class Store_OrderJDBCDAO implements Store_OrderDAO_interface{
 				orderVO.setTotalprice(rs.getInt("totalprice"));
 				orderVO.setOrder_way(rs.getString("order_way"));
 				orderVO.setReceive_address(rs.getString("receive_address"));
-				orderVO.setQrcode(rs.getBytes("qrcode"));
 				orderVO.setOrder_note(rs.getString("order_note"));
 				orderVO.setOrder_taketime(rs.getTimestamp("order_taketime"));
 			}
@@ -288,7 +285,6 @@ public class Store_OrderJDBCDAO implements Store_OrderDAO_interface{
 				orderVO.setTotalprice(rs.getInt("totalprice"));
 				orderVO.setOrder_way(rs.getString("order_way"));
 				orderVO.setReceive_address(rs.getString("receive_address"));
-				orderVO.setQrcode(rs.getBytes("qrcode"));
 				orderVO.setOrder_note(rs.getString("order_note"));
 				orderVO.setOrder_taketime(rs.getTimestamp("order_taketime"));
 				list.add(orderVO); // Store the row in the list
@@ -481,7 +477,6 @@ public static void main(String[] args) throws IOException{
 			System.out.print(aOrder.getTotalprice() + ",");
 			System.out.print(aOrder.getOrder_way() + ",");
 			System.out.print(aOrder.getReceive_address() + ",");
-			System.out.print(aOrder.getQrcode() + ",");
 			System.out.print(aOrder.getOrder_note() + ",");
 			System.out.print(aOrder.getOrder_taketime() + ",");
 			System.out.println("---------------------");	
